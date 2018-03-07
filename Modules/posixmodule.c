@@ -7401,11 +7401,18 @@ win_readlink(PyObject *self, PyObject *args, PyObject *kwargs)
             rdb->SymbolicLinkReparseBuffer.PrintNameOffset);
         pname_len = rdb->SymbolicLinkReparseBuffer.PrintNameLength;
     }
-    else
+    else if (rdb->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT)
     {
         print_name = (wchar_t *)((char*)rdb->MountPointReparseBuffer.PathBuffer +
             rdb->MountPointReparseBuffer.PrintNameOffset);
         pname_len = rdb->MountPointReparseBuffer.PrintNameLength;
+    }
+    else if (IsReparseTagMicrosoft(rdp->ReparseTag)) {
+
+    }
+    else
+    {
+
     }
 
     result = PyUnicode_FromWideChar(print_name, pname_len / sizeof(wchar_t));

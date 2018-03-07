@@ -1860,9 +1860,9 @@ _Py_is_reparse_link(const wchar_t *path, ULONG reparse_tag)
     wchar_t *normpath = NULL;
     wchar_t *mountpath = NULL;
     DWORD buflen;
-    if (reparse_tag == IO_REPARSE_TAG_SYMLINK)
-        return TRUE;
-    else if (reparse_tag == IO_REPARSE_TAG_MOUNT_POINT)
+    if (reparse_tag != IO_REPARSE_TAG_MOUNT_POINT)
+        return IsReparseTagNameSurrogate(reparse_tag);
+    else
     {
         /* Junction point. Either a link (e.g. mklink /j) or a volume mount
            points (e.g. mountvol.exe). Compare GetVolumePathNameW to path
